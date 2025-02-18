@@ -1,4 +1,5 @@
-import { Text, View } from "react-native";
+import { Link } from "expo-router";
+import { View, StyleSheet } from "react-native";
 
 export default function Index() {
   return (
@@ -9,7 +10,17 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Link href="/itens/ItemScreen" style={styles.link}>
+        Ir para os itens
+      </Link>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  link: {
+    fontSize: 20,
+    textDecorationLine: "underline",
+    color: "blue",
+  },
+});
