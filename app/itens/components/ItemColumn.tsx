@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import ItemCard from "./ItemCard";
 
 interface Item {
@@ -28,7 +28,9 @@ export default function ItemColumn({ items }: ItemColumnProps) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex: 1,
+    flexDirection: "column",
+    backgroundColor: "#131112",
   },
   title: {
     fontSize: 24,
