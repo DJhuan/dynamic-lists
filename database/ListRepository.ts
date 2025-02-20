@@ -1,0 +1,46 @@
+import * as SQLite from "expo-sqlite";
+import { List, DatabaseListReturn } from "@/Types";
+
+async function newList({ nomelista: nomeLista, descricao, colunas }: List) {
+  const db = await SQLite.openDatabaseAsync("dylists.db");
+
+  const listStatement = await db.prepareAsync(
+    "INSERT INTO lista (nomelista, descricao) VALUES (?, ?) RETURNING *"
+  );
+  const columnStatement = await db.prepareAsync(
+    "INSERT INTO coluna (nomecoluna, idlista, ordemlista) VALUES (?, ?, ?)"
+  );
+  try {
+    const resultIterator = await listStatement.executeAsync<DatabaseListReturn>(
+      nomeLista,
+      descricao
+    );
+
+    const idLista = <number>(await resultIterator.next()).value.idlista;
+
+    colunas.map(async (coluna, ordemLista) => {
+      await columnStatement.executeAsync(coluna, idLista, ordemLista);
+    });
+
+  } finally {
+    await listStatement.finalizeAsync();
+    await columnStatement.finalizeAsync();
+  }
+}
+
+async function getAllLists(): Promise<List[]> {
+  const db = await SQLite.openDatabaseAsync("dylists.db");
+  return db.getAllAsync("SELECT * FROM lista");
+}
+
+async function getAllColumns(
+  idLista: number
+): Promise<{ nomecoluna: string; oredemlista: number }[]> {
+  const db = await SQLite.openDatabaseAsync("dylists.db");
+  return db.getAllAsync(
+    "SELECT nomecoluna, ordemlista FROM coluna WHERE idlista = ?",
+    idLista
+  );
+}
+
+export default { newList, getAllLists, getAllColumns };
