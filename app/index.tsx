@@ -1,24 +1,10 @@
 import { Link } from "expo-router";
-import { useEffect, useState } from "react";
-import { View, ScrollView, Text, StyleSheet } from "react-native";
-import ListRepository from "@/database/ListRepository";
-import { List } from "@/Types";
+import { View, ScrollView, StyleSheet } from "react-native";
+import { useListContext } from "@/contexts/ListContext";
+import ListCard from "./components/ListCard";
 
 export default function Index() {
-  const [lists, setLists] = useState<List[]>([]);
-
-  useEffect(() => {
-    const fetchLists = async () => {
-      try {
-        const allLists = await ListRepository.getAllLists();
-        setLists(allLists);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchLists();
-  }, []);
+  const { lists, fetchLists } = useListContext();
 
   return (
     <View style={styles.container}>
@@ -27,10 +13,7 @@ export default function Index() {
       </Link>
       <ScrollView contentContainerStyle={styles.listContainer}>
         {lists.map((list, index) => (
-          <View key={index} style={styles.listItem}>
-            <Text style={styles.listTitle}>{list.nomelista}</Text>
-            <Text style={styles.listDescription}>{list.descricao}</Text>
-          </View>
+          <ListCard key={index} list={list} />
         ))}
       </ScrollView>
     </View>
@@ -40,9 +23,9 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#131112",
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
   },
   link: {
     fontSize: 20,
@@ -51,20 +34,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   listContainer: {
-    width: "100%",
-  },
-  listItem: {
-    padding: 20,
-    marginVertical: 10,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 10,
-  },
-  listTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  listDescription: {
-    fontSize: 14,
-    color: "#789",
+    flex: 1,
   },
 });

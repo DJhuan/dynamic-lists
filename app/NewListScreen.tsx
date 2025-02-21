@@ -4,12 +4,13 @@ import { View, Text, TextInput, StyleSheet } from "react-native";
 import ConfirmButton from "./components/ConfirmButton";
 import CancelButton from "./components/CancelButton";
 import ListRepository from "../database/ListRepository";
+import { useListContext } from "../contexts/ListContext";
 
 export default function NewListScreen() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-
   const navigation = useNavigation();
+  const { fetchLists } = useListContext();
 
   const newList = async () => {
     if (title) {
@@ -18,33 +19,32 @@ export default function NewListScreen() {
         descricao: description,
         colunas: ["c1"],
       });
+      fetchLists(); // Updates the list of lists globally
       navigation.goBack();
     }
   };
 
   return (
-    <>
-      <View style={styles.container}>
-        <Text style={styles.title}>Nome da Lista</Text>
-        <TextInput
-          placeholder="Minha lista 1"
-          style={styles.titleInput}
-          value={title}
-          onChangeText={setTitle}
-        />
-        <Text style={styles.title}>Descrição</Text>
-        <TextInput
-          placeholder="Descrição da minha lista 1"
-          style={styles.descriptionInput}
-          value={description}
-          onChangeText={setDescription}
-        />
-        <View style={styles.buttonContainer}>
-          <CancelButton onPress={() => navigation.goBack()} />
-          <ConfirmButton onPress={newList} />
-        </View>
+    <View style={styles.container}>
+      <Text style={styles.title}>Nome da Lista</Text>
+      <TextInput
+        placeholder="Minha lista 1"
+        style={styles.titleInput}
+        value={title}
+        onChangeText={setTitle}
+      />
+      <Text style={styles.title}>Descrição</Text>
+      <TextInput
+        placeholder="Descrição da minha lista 1"
+        style={styles.descriptionInput}
+        value={description}
+        onChangeText={setDescription}
+      />
+      <View style={styles.buttonContainer}>
+        <CancelButton onPress={() => navigation.goBack()} />
+        <ConfirmButton onPress={newList} />
       </View>
-    </>
+    </View>
   );
 }
 

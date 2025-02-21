@@ -21,14 +21,18 @@ async function newList({ nomelista: nomeLista, descricao, colunas }: List) {
     colunas.map(async (coluna, ordemLista) => {
       await columnStatement.executeAsync(coluna, idLista, ordemLista);
     });
-
   } finally {
     await listStatement.finalizeAsync();
     await columnStatement.finalizeAsync();
   }
 }
 
-async function getAllLists(): Promise<List[]> {
+async function deleteList(idLista: number) {
+  const db = await SQLite.openDatabaseAsync("dylists.db");
+  db.runAsync("DELETE FROM lista WHERE idlista = ?", idLista);
+}
+
+async function getAllLists(): Promise<DatabaseListReturn[]> {
   const db = await SQLite.openDatabaseAsync("dylists.db");
   return db.getAllAsync("SELECT * FROM lista");
 }
@@ -43,4 +47,4 @@ async function getAllColumns(
   );
 }
 
-export default { newList, getAllLists, getAllColumns };
+export default { newList, getAllLists, getAllColumns, deleteList };
