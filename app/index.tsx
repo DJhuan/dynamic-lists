@@ -2,6 +2,7 @@ import { Link } from "expo-router";
 import { View, ScrollView, StyleSheet } from "react-native";
 import { useListContext } from "@/contexts/ListContext";
 import ListCard from "../src/components/ListCard";
+import { DatabaseItemReturn } from "@/Types";
 
 export default function Index() {
   const { lists, fetchLists } = useListContext();
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
   link: {
     fontSize: 20,
     textDecorationLine: "underline",
-    color: "blue",
+    color: "white",
     marginBottom: 20,
   },
   listContainer: {

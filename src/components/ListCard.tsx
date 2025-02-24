@@ -19,7 +19,7 @@ export default function ListCard({ list }: { list: DatabaseListReturn }) {
 
   return (
     <Link
-      href={{ pathname: "/lista/[idlista]", params: { idlista: list.idlista } }}
+      href={{ pathname: "/lista/[idlista]", params: { idlista: list.idlista, nomelista: list.nomelista } }}
       asChild
     >
       <TouchableOpacity style={styles.listItem}>

@@ -1,16 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams, useNavigation } from "expo-router";
 import ItemColumn from "../../src/lista/components/ItemColumn";
 import PlusSvg from "../../src/lista/components/PlusSvg";
 import LitterSvg from "../../src/lista/components/LitterSvg";
+import { DatabaseItemReturn } from "@/Types";
 
 export default function ListScreen() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<DatabaseItemReturn[]>([]);
+  const { idlista, nomelista } = useLocalSearchParams();
+
+  const navigation = useNavigation();
+  const fetchItems = async () => {
+    // const response = await ItemRepository.getAllItems(Number(idlista));
+    // setItems(response);
+  };
+
+  useEffect(() => {
+    navigation.setOptions({ title: nomelista });
+    fetchItems();
+  }, []);
 
   return (
     <>
-      <ItemColumn items={items} />
+      <ItemColumn columnItems={items} />
       <View style={styles.buttonContainer}>
         <Link href="/lista/NewItemScreen">
           <View style={styles.deleteButton}>

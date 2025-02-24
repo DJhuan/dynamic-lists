@@ -1,25 +1,20 @@
 import { useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import ItemCard from "./ItemCard";
-
-interface Item {
-  name: string;
-  index: number;
-  column: number;
-}
+import { DatabaseItemReturn } from "@/Types";
 
 interface ItemColumnProps {
-  items: Item[];
+  columnItems: DatabaseItemReturn[];
 }
 
-export default function ItemColumn({ items }: ItemColumnProps) {
-  const [itens, setItens] = useState(items);
+export default function ItemColumn({ columnItems }: ItemColumnProps) {
+  const [items, setItems] = useState<DatabaseItemReturn[]>(columnItems);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>
-        {itens.map((item) => (
-          <ItemCard key={item.index} name={item.name} />
+        {items.map((item, index) => (
+          <ItemCard key={index} name={item.nomeitem} />
         ))}
       </View>
     </ScrollView>
