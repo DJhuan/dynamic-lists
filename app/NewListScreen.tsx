@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import ConfirmButton from "./components/ConfirmButton";
-import CancelButton from "./components/CancelButton";
+import ConfirmButton from "../src/components/ConfirmButton";
+import CancelButton from "../src/components/CancelButton";
 import ListRepository from "../database/ListRepository";
 import { useListContext } from "../contexts/ListContext";
 

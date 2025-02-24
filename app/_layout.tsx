@@ -2,7 +2,7 @@ import { Stack } from "expo-router";
 import { Suspense } from "react";
 import { SQLiteProvider } from "expo-sqlite";
 import { initializeDatabase } from "@/database/initializeDatabase";
-import LoadingDatabase from "./components/LoadingDatabase";
+import LoadingDatabase from "../src/components/LoadingDatabase";
 import { ListProvider } from "@/contexts/ListContext";
 
 export default function RootLayout() {
@@ -16,13 +16,10 @@ export default function RootLayout() {
               name="NewListScreen"
               options={{ title: "Nova lista" }}
             />
+            <Stack.Screen name="lista/[idlista]" options={{ title: "Lista" }} />
             <Stack.Screen
-              name="itens/ItemScreen"
-              options={{ title: "Itens da lista" }}
-            />
-            <Stack.Screen
-              name="itens/NewItemScreen"
-              options={{ title: "Itens da lista" }}
+              name="lista/NewItemScreen"
+              options={{ title: "Novo item" }}
             />
           </Stack>
         </ListProvider>

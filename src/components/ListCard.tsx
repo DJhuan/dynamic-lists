@@ -3,10 +3,11 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import PenSvg from "./PenSvg.jsx";
 import ListRepository from "@/database/ListRepository";
 import { useListContext } from "@/contexts/ListContext";
+import { Link } from "expo-router";
 
 export default function ListCard({ list }: { list: DatabaseListReturn }) {
   const { fetchLists } = useListContext();
-  
+
   const deleteList = async () => {
     try {
       ListRepository.deleteList(list.idlista);
@@ -17,15 +18,20 @@ export default function ListCard({ list }: { list: DatabaseListReturn }) {
   };
 
   return (
-    <View style={styles.listItem}>
-      <Text style={styles.listTitle}>{list.nomelista}</Text>
-      <View style={styles.infoContainer}>
-        <Text style={styles.listDescription}>{list.descricao}</Text>
-        <TouchableOpacity onPress={deleteList}>
-          <PenSvg />
-        </TouchableOpacity>
-      </View>
-    </View>
+    <Link
+      href={{ pathname: "/lista/[idlista]", params: { idlista: list.idlista } }}
+      asChild
+    >
+      <TouchableOpacity style={styles.listItem}>
+        <Text style={styles.listTitle}>{list.nomelista}</Text>
+        <View style={styles.infoContainer}>
+          <Text style={styles.listDescription}>{list.descricao}</Text>
+          <TouchableOpacity onPress={deleteList}>
+            <PenSvg />
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    </Link>
   );
 }
 

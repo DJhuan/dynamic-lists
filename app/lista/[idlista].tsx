@@ -1,27 +1,24 @@
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { Link } from "expo-router";
-import ItemColumn from "./components/ItemColumn";
-import PlusSvg from "../../assets/svg/Mais.svg";
-import LitterSvg from "../../assets/svg/Lixeira.svg";
+import { Link, useLocalSearchParams } from "expo-router";
+import ItemColumn from "../../src/lista/components/ItemColumn";
+import PlusSvg from "../../src/lista/components/PlusSvg";
+import LitterSvg from "../../src/lista/components/LitterSvg";
 
-export default function ItemScreen() {
-  const [items, setItems] = useState([
-    { name: "joaoasd", index: 1, column: 0 },
-    { name: "maria", index: 2, column: 0 },
-  ]);
+export default function ListScreen() {
+  const [items, setItems] = useState([]);
 
   return (
     <>
       <ItemColumn items={items} />
       <View style={styles.buttonContainer}>
-        <Link href="/itens/NewItemScreen">
+        <Link href="/lista/NewItemScreen">
           <View style={styles.deleteButton}>
             <LitterSvg />
           </View>
         </Link>
 
-        <Link href="/itens/NewItemScreen">
+        <Link href="/lista/NewItemScreen">
           <View style={styles.plusButton}>
             <PlusSvg />
           </View>

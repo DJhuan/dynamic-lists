@@ -1,7 +1,7 @@
 import { Link } from "expo-router";
 import { View, ScrollView, StyleSheet } from "react-native";
 import { useListContext } from "@/contexts/ListContext";
-import ListCard from "./components/ListCard";
+import ListCard from "../src/components/ListCard";
 
 export default function Index() {
   const { lists, fetchLists } = useListContext();

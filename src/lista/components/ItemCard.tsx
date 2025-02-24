@@ -1,16 +1,16 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import LArrow from "../../../assets/svg/LArrow.svg";
-import RArrow from "../../../assets/svg/RArrow.svg";
+import LArrowSvg from "./LArrowSvg";
+import RArrowSvg from "./RArrowSvg";
 
 export default function ItemCard({ name }: { name: string }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.topc}>
-        <LArrow />
+        <LArrowSvg />
       </TouchableOpacity>
       <Text style={styles.itemName}>{name}</Text>
       <TouchableOpacity style={styles.topc}>
-        <RArrow />
+        <RArrowSvg />
       </TouchableOpacity>
     </View>
   );
@@ -41,5 +41,5 @@ const styles = StyleSheet.create({
     width: 50,
     alignItems: "center",
     justifyContent: "center",
-  }
+  },
 });
