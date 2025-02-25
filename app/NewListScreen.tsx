@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { useNavigation, useLocalSearchParams } from "expo-router";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import ConfirmButton from "../src/components/ConfirmButton";
 import CancelButton from "../src/components/CancelButton";
@@ -7,17 +7,42 @@ import ListRepository from "../database/ListRepository";
 import { useListContext } from "../contexts/ListContext";
 
 export default function NewListScreen() {
+  const { idlista } = useLocalSearchParams();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const navigation = useNavigation();
   const { fetchLists } = useListContext();
 
+  useEffect(() => {
+    if (idlista) {
+      fetchList();
+    }
+  }, []);
+
+  const fetchList = async () => {
+    const list = await ListRepository.getList({ idlista: Number(idlista) });
+    if (list) {
+      setTitle(list.nomelista);
+      setDescription(list.descricao);
+    }
+  };
+
   const newList = async () => {
-    if (title) {
+    if (idlista) {
+      await ListRepository.updateList({
+        idlista: Number(idlista),
+        nomelista: title,
+        descricao: description,
+        colunas: [],
+      });
+      fetchLists();
+      navigation.goBack();
+    } else if (title) {
       await ListRepository.newList({
         nomelista: title,
         descricao: description,
-        colunas: ["c1"],
+        colunas: ["Coluna 1"],
       });
       fetchLists(); // Updates the list of lists globally
       navigation.goBack();
@@ -53,6 +78,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#131112",
   },
   title: {
     fontSize: 20,

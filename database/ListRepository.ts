@@ -27,9 +27,56 @@ async function newList({ nomelista: nomeLista, descricao, colunas }: List) {
   }
 }
 
+async function getList({
+  idlista,
+}: {
+  idlista: number;
+}): Promise<DatabaseListReturn | null> {
+  const db = await SQLite.openDatabaseAsync("dylists.db");
+  const result = await db.getFirstAsync(
+    "SELECT * FROM lista WHERE idlista = ?",
+    idlista
+  );
+  if (result) {
+    return <DatabaseListReturn>result;
+  } else {
+    return null;
+  }
+}
+
 async function deleteList(idLista: number) {
   const db = await SQLite.openDatabaseAsync("dylists.db");
   db.runAsync("DELETE FROM lista WHERE idlista = ?", idLista);
+}
+
+async function updateList({ idlista, nomelista, descricao, colunas }: List) {
+  const db = await SQLite.openDatabaseAsync("dylists.db");
+
+  const listStatement = await db.prepareAsync(
+    "UPDATE lista SET nomelista = ?, descricao = ? WHERE idlista = ? RETURNING *"
+  );
+  const columnStatement = await db.prepareAsync(
+    "INSERT INTO coluna (nomecoluna, idlista, ordemlista) VALUES (?, ?, ?)"
+  );
+  try {
+    if (idlista) {
+      const resultIterator =
+      await listStatement.executeAsync<DatabaseListReturn>(
+        nomelista,
+        descricao,
+        idlista
+      );
+      
+      const idLista = <number>(await resultIterator.next()).value.idlista;
+      
+      colunas.map(async (coluna, ordemLista) => {
+        await columnStatement.executeAsync(coluna, idLista, ordemLista);
+      });
+    }
+  } finally {
+    await listStatement.finalizeAsync();
+    await columnStatement.finalizeAsync();
+  }
 }
 
 async function getAllLists(): Promise<DatabaseListReturn[]> {
@@ -47,4 +94,4 @@ async function getAllColumns(
   );
 }
 
-export default { newList, getAllLists, getAllColumns, deleteList };
+export default { newList, getAllLists, getAllColumns, deleteList, getList, updateList };

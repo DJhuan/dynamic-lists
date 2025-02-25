@@ -1,4 +1,5 @@
 export interface List {
+  idlista?: number;
   nomelista: string;
   descricao: string;
   colunas: string[];
