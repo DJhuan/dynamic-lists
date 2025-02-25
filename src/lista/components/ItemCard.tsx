@@ -1,19 +1,41 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import LArrowSvg from "./LArrowSvg";
 import RArrowSvg from "./RArrowSvg";
+import LitterSvg from "./LitterSvg";
+import { DatabaseItemReturn } from "@/Types";
 
-export default function ItemCard({ name }: { name: string }) {
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.topc}>
-        <LArrowSvg />
-      </TouchableOpacity>
-      <Text style={styles.itemName}>{name}</Text>
-      <TouchableOpacity style={styles.topc}>
-        <RArrowSvg />
-      </TouchableOpacity>
-    </View>
-  );
+interface ItemCardProps {
+  item: DatabaseItemReturn;
+  onDelete: (idItem: number) => void;
+  deleting: boolean;
+}
+
+export default function ItemCard({ item, onDelete, deleting }: ItemCardProps) {
+  if (deleting) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.itemName}>{item.nomeitem}</Text>
+        <TouchableOpacity
+          style={styles.topc}
+          onPress={() => onDelete(item.iditem)}
+        >
+          <LitterSvg color="#FF4747" />
+        </TouchableOpacity>
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.topc}>
+          <LArrowSvg />
+        </TouchableOpacity>
+        <Text style={styles.itemName}>{item.nomeitem}</Text>
+        <TouchableOpacity style={styles.topc}>
+          <RArrowSvg />
+        </TouchableOpacity>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

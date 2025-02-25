@@ -5,20 +5,33 @@ import { DatabaseItemReturn } from "@/Types";
 
 interface ItemColumnProps {
   columnItems: DatabaseItemReturn[];
+  onDeleteItem: (idItem: number) => void;
+  deleting: boolean;
 }
 
-export default function ItemColumn({ columnItems }: ItemColumnProps) {
+export default function ItemColumn({
+  columnItems,
+  onDeleteItem,
+  deleting,
+}: ItemColumnProps) {
   const [items, setItems] = useState<DatabaseItemReturn[]>(columnItems);
 
   useEffect(() => {
     setItems(columnItems);
   }, [columnItems]);
 
+  useEffect(() => {}, [deleting]);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>
         {items.map((item, index) => (
-          <ItemCard key={index} name={item.nomeitem} />
+          <ItemCard
+            key={index}
+            item={item}
+            onDelete={onDeleteItem}
+            deleting={deleting}
+          />
         ))}
       </View>
     </ScrollView>

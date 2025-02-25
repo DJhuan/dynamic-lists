@@ -13,11 +13,15 @@ interface coluna {
 interface ColumnContainerProps {
   items: DatabaseItemReturn[];
   columns: coluna[];
+  onDelete: (idItem: number) => void;
+  deleting: boolean;
 }
 
 export default function ColumnContainer({
   items,
   columns,
+  onDelete,
+  deleting,
 }: ColumnContainerProps) {
   const [colNumber, setColnumber] = useState(0);
 
@@ -36,6 +40,7 @@ export default function ColumnContainer({
     return items.filter((item) => item.coluna === idcol);
   }
 
+  // When the items are still loading
   if (columns.length === 0) {
     return (
       <View style={styles.container}>
@@ -50,7 +55,11 @@ export default function ColumnContainer({
         columnTitle={columns[colNumber].nomecoluna}
         callback={updateColNumber}
       />
-      <ItemColumn columnItems={filteredItems(colNumber)} />
+      <ItemColumn
+        columnItems={filteredItems(colNumber)}
+        onDeleteItem={onDelete}
+        deleting={deleting}
+      />
     </View>
   );
 }

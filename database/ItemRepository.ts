@@ -17,4 +17,15 @@ async function newItem(nomeitem : string, idlista : number){
   }
 }
 
-export default { getAllItems, newItem};
+async function deleteItem(idItem: number): Promise<void> {
+  const db = await SQLite.openDatabaseAsync("dylists.db");
+
+  const deleteStatement = await db.prepareAsync("DELETE FROM item WHERE iditem = ?");
+  try {
+    await deleteStatement.executeAsync(idItem);
+  } finally {
+    await deleteStatement.finalizeAsync();
+  }
+}
+
+export default { getAllItems, newItem, deleteItem};

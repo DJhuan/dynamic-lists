@@ -35,15 +35,21 @@ export default function ListScreen() {
     setCols(await ListRepository.getAllColumns(Number(idlista)));
   };
 
+  const fetchItems = async () => {
+    setItems(await ItemRepository.getAllItems(Number(idlista)));
+  };
+
   const newItem = async () => {
     if (itemname) {
       await ItemRepository.newItem(itemname, Number(idlista));
       setItemname("");
+      fetchItems();
     }
   };
 
-  const fetchItems = async () => {
-    setItems(await ItemRepository.getAllItems(Number(idlista)));
+  const deleteItem = async (idItem: number) => {
+    await ItemRepository.deleteItem(idItem);
+    fetchItems();
   };
 
   const handlePlusAction = () => {
@@ -67,21 +73,22 @@ export default function ListScreen() {
     }
   };
 
-  // Updates the title of the screen
+  // Updates the title of the screen, columns and items when the screen is loaded
   useEffect(() => {
     navigation.setOptions({ title: nomelista });
     getColumns();
-  }, []);
-
-  // Updates the items
-  useEffect(() => {
     fetchItems();
-  }, [newItem]);
+  }, []);
 
   return (
     <>
       {!editing ? (
-        <ColumnContainer items={items} columns={cols} />
+        <ColumnContainer
+          items={items}
+          columns={cols}
+          onDelete={deleteItem}
+          deleting={deleting}
+        />
       ) : (
         <View style={styles.textContainer}>
           <Text style={styles.title}>Nome do item</Text>
