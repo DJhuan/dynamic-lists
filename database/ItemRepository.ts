@@ -6,4 +6,15 @@ async function getAllItems(idLista: number): Promise<DatabaseItemReturn[]> {
   return db.getAllAsync("SELECT * FROM item WHERE idlista = ?", idLista);
 }
 
-export default { getAllItems};
+async function newItem(nomeitem : string, idlista : number){
+  const db = await SQLite.openDatabaseAsync("dylists.db");
+
+  const itemStatement = await db.prepareAsync("INSERT INTO item (idlista, nomeitem, coluna) VALUES (?, ?, 0)");
+  try {
+    await itemStatement.executeAsync(idlista, nomeitem);
+  } finally {
+    await itemStatement.finalizeAsync();
+  }
+}
+
+export default { getAllItems, newItem};

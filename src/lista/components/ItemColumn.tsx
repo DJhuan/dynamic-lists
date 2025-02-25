@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import ItemCard from "./ItemCard";
 import { DatabaseItemReturn } from "@/Types";
@@ -9,6 +9,10 @@ interface ItemColumnProps {
 
 export default function ItemColumn({ columnItems }: ItemColumnProps) {
   const [items, setItems] = useState<DatabaseItemReturn[]>(columnItems);
+
+  useEffect(() => {
+    setItems(columnItems);
+  }, [columnItems]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

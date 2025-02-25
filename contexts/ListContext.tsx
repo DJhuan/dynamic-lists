@@ -21,7 +21,7 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
       const allLists: DatabaseListReturn[] = await ListRepository.getAllLists();
       setLists(allLists);
     } catch (error) {
-      console.error(error);
+      console.error("An error ocurred when fetching lists:\n", error);
     }
   };
 

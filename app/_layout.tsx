@@ -17,10 +17,6 @@ export default function RootLayout() {
               options={{ title: "Nova lista" }}
             />
             <Stack.Screen name="lista/[idlista]" options={{ title: "Lista" }} />
-            <Stack.Screen
-              name="lista/NewItemScreen"
-              options={{ title: "Novo item" }}
-            />
           </Stack>
         </ListProvider>
       </SQLiteProvider>
