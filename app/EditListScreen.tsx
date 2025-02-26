@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigation, useLocalSearchParams } from "expo-router";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, Text, TextInput, StyleSheet, ScrollView } from "react-native";
 import ConfirmButton from "../src/components/ConfirmButton";
 import CancelButton from "../src/components/CancelButton";
 import ListRepository from "../database/ListRepository";
 import { useListContext } from "../contexts/ListContext";
 import LitterButton from "@/src/components/LitterButton";
 import Toast from "react-native-toast-message";
+import ColumnEditor from "@/src/components/ColumnEditor";
 
 export default function NewListScreen() {
   const { idlista } = useLocalSearchParams();
@@ -31,7 +32,7 @@ export default function NewListScreen() {
     }
   };
 
-  const newList = async () => {
+  const editList = async () => {
     if (title) {
       await ListRepository.updateList({
         idlista: Number(idlista),
@@ -45,7 +46,6 @@ export default function NewListScreen() {
   };
 
   const deleteList = async () => {
-    console.log("deleteList");
     if (idlista) {
       await ListRepository.deleteList(Number(idlista));
       fetchLists();
@@ -63,30 +63,33 @@ export default function NewListScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Nome da Lista</Text>
-      <TextInput
-        maxLength={60}
-        placeholder="Minha lista 1"
-        style={styles.titleInput}
-        value={title}
-        onChangeText={setTitle}
-      />
-      <Text style={styles.title}>Descrição</Text>
-      <TextInput
-        maxLength={120}
-        multiline={true}
-        placeholder="Descrição da minha lista 1"
-        style={styles.descriptionInput}
-        value={description}
-        onChangeText={setDescription}
-      />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Text style={styles.title}>Nome da Lista</Text>
+        <TextInput
+          maxLength={60}
+          placeholder="Minha lista 1"
+          style={styles.titleInput}
+          value={title}
+          onChangeText={setTitle}
+        />
+        <Text style={styles.title}>Descrição</Text>
+        <TextInput
+          maxLength={120}
+          multiline={true}
+          placeholder="Descrição da minha lista 1"
+          style={styles.descriptionInput}
+          value={description}
+          onChangeText={setDescription}
+        />
+        <ColumnEditor idlista={Number(idlista)} />
+      </ScrollView>
       <View style={styles.buttonContainer}>
         <LitterButton
           onPress={() => showToast()}
           onLongPress={() => deleteList()}
         />
         <CancelButton onPress={() => navigation.goBack()} />
-        <ConfirmButton onPress={newList} />
+        <ConfirmButton onPress={editList} />
       </View>
     </View>
   );
@@ -95,9 +98,11 @@ export default function NewListScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     backgroundColor: "#1E1B26",
+  },
+  scrollContainer: {
     padding: 30,
+    paddingBottom: 100, // Adiciona espaço para o contêiner de botões
   },
   title: {
     fontSize: 20,
@@ -123,10 +128,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    position: "absolute",
     alignItems: "center",
-    right: 10,
-    bottom: 15,
     gap: 10,
+    padding: 20,
   },
 });

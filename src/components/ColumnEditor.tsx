@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import ColumnRepository from "@/database/ColumnRepository";
+import Toast from "react-native-toast-message";
 
 interface Column {
   idcoluna: number;
@@ -22,9 +29,9 @@ const ColumnEditor: React.FC<ColumnEditorProps> = ({ idlista }) => {
   }, []);
 
   const fetchColumns = async () => {
-    if (idlista){
-        const cols = await ColumnRepository.getAllColumns(idlista);
-        setColumns(cols);
+    if (idlista) {
+      const cols = await ColumnRepository.getAllColumns(idlista);
+      setColumns(cols);
     }
   };
 
@@ -44,8 +51,16 @@ const ColumnEditor: React.FC<ColumnEditorProps> = ({ idlista }) => {
   };
 
   const handleDeleteColumn = async (id: number) => {
-    await ColumnRepository.deleteColumn(id);
-    fetchColumns();
+    if (columns.length === 1) {
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "Não é possível deletar a última coluna",
+      });
+    } else {
+      await ColumnRepository.deleteColumn(id);
+      fetchColumns();
+    }
   };
 
   return (
@@ -60,17 +75,23 @@ const ColumnEditor: React.FC<ColumnEditorProps> = ({ idlista }) => {
                 value={newColumnName}
                 onChangeText={setNewColumnName}
               />
-              <TouchableOpacity onPress={() => handleSaveColumn(column.idcoluna)}>
+              <TouchableOpacity
+                onPress={() => handleSaveColumn(column.idcoluna)}
+              >
                 <Text style={styles.saveButton}>Salvar</Text>
               </TouchableOpacity>
             </>
           ) : (
             <>
               <Text style={styles.columnName}>{column.nomecoluna}</Text>
-              <TouchableOpacity onPress={() => handleEditColumn(column.idcoluna)}>
+              <TouchableOpacity
+                onPress={() => handleEditColumn(column.idcoluna)}
+              >
                 <Text style={styles.editButton}>Editar</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleDeleteColumn(column.idcoluna)}>
+              <TouchableOpacity
+                onPress={() => handleDeleteColumn(column.idcoluna)}
+              >
                 <Text style={styles.deleteButton}>Deletar</Text>
               </TouchableOpacity>
             </>
