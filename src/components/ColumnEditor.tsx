@@ -9,7 +9,7 @@ interface Column {
 }
 
 interface ColumnEditorProps {
-  idlista?: number;
+  idlista: number;
 }
 
 const ColumnEditor: React.FC<ColumnEditorProps> = ({ idlista }) => {
