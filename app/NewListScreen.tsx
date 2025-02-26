@@ -5,6 +5,8 @@ import ConfirmButton from "../src/components/ConfirmButton";
 import CancelButton from "../src/components/CancelButton";
 import ListRepository from "../database/ListRepository";
 import { useListContext } from "../contexts/ListContext";
+import LitterButton from "@/src/components/LitterButton";
+import Toast from "react-native-toast-message";
 
 export default function NewListScreen() {
   const { idlista } = useLocalSearchParams();
@@ -23,6 +25,7 @@ export default function NewListScreen() {
   const fetchList = async () => {
     const list = await ListRepository.getList({ idlista: Number(idlista) });
     if (list) {
+      navigation.setOptions({ title: list.nomelista });
       setTitle(list.nomelista);
       setDescription(list.descricao);
     }
@@ -49,6 +52,23 @@ export default function NewListScreen() {
     }
   };
 
+  const deleteList = async () => {
+    console.log("deleteList");
+    if (idlista) {
+      await ListRepository.deleteList(Number(idlista));
+      fetchLists();
+      navigation.goBack();
+    }
+  };
+
+  const showToast = () => {
+    Toast.show({
+      type: "info",
+      text1: "Apagando um item",
+      text2: "Para apagar, segure o botão de apagar",
+    });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Nome da Lista</Text>
@@ -69,6 +89,7 @@ export default function NewListScreen() {
         onChangeText={setDescription}
       />
       <View style={styles.buttonContainer}>
+        {idlista ? <LitterButton onPress={() => showToast()} onLongPress={() => deleteList()}/> : null}
         <CancelButton onPress={() => navigation.goBack()} />
         <ConfirmButton onPress={newList} />
       </View>

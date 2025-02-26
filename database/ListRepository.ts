@@ -46,7 +46,9 @@ async function getList({
 
 async function deleteList(idLista: number) {
   const db = await SQLite.openDatabaseAsync("dylists.db");
-  db.runAsync("DELETE FROM lista WHERE idlista = ?", idLista);
+  await db.runAsync("DELETE FROM lista WHERE idlista = ?", idLista);
+  await db.runAsync("DELETE FROM coluna WHERE idlista = ?", idLista);
+  await db.runAsync("DELETE FROM item WHERE idlista = ?", idLista);
 }
 
 async function updateList({ idlista, nomelista, descricao, colunas }: List) {

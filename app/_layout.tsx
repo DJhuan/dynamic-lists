@@ -5,6 +5,8 @@ import { initializeDatabase } from "@/database/initializeDatabase";
 import LoadingDatabase from "../src/components/LoadingDatabase";
 import { ListProvider } from "@/contexts/ListContext";
 
+import Toast from "react-native-toast-message";
+
 export default function RootLayout() {
   return (
     <Suspense fallback={<LoadingDatabase />}>
@@ -18,6 +20,7 @@ export default function RootLayout() {
             />
             <Stack.Screen name="lista/[idlista]" options={{ title: "Lista" }} />
           </Stack>
+          <Toast />
         </ListProvider>
       </SQLiteProvider>
     </Suspense>
