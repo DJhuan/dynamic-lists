@@ -53,6 +53,7 @@ export default function NewListScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Nome da Lista</Text>
       <TextInput
+        maxLength={60}
         placeholder="Minha lista 1"
         style={styles.titleInput}
         value={title}
@@ -60,6 +61,8 @@ export default function NewListScreen() {
       />
       <Text style={styles.title}>Descrição</Text>
       <TextInput
+        maxLength={120}
+        multiline={true}
         placeholder="Descrição da minha lista 1"
         style={styles.descriptionInput}
         value={description}
@@ -77,30 +80,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#131112",
+    backgroundColor: "#1E1B26",
+    padding: 30,
   },
   title: {
     fontSize: 20,
     alignSelf: "flex-start",
-    marginLeft: 20,
+    color: "#FFF",
+    padding: 10,
   },
   titleInput: {
-    width: "90%",
     padding: 20,
-    margin: 10,
     backgroundColor: "#71697A",
     borderRadius: 16,
     boxShadow: "inset 4 3 3 #534A5C",
   },
   descriptionInput: {
-    width: "90%",
-    height: 200,
+    flex: 1,
     padding: 20,
-    margin: 10,
     backgroundColor: "#71697A",
     borderRadius: 16,
     boxShadow: "inset 4 3 3 #534A5C",
+    textOverflow: "ellipsis",
+    overflow: "hidden",
   },
   buttonContainer: {
     flexDirection: "row",
@@ -109,5 +111,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     right: 10,
     bottom: 15,
+    gap: 10,
   },
 });

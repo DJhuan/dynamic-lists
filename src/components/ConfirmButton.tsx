@@ -21,5 +21,6 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 80,
     height: 80,
+    boxShadow: "inset 2 2 3 #83f05b, inset -1 -1 3 #2c6118",
   },
 });
