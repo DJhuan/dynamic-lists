@@ -1,28 +1,64 @@
-import { useState } from "react";
-import { useNavigation } from "expo-router";
+import { useEffect, useState } from "react";
+import { useNavigation, useLocalSearchParams } from "expo-router";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import ConfirmButton from "../src/components/ConfirmButton";
 import CancelButton from "../src/components/CancelButton";
 import ListRepository from "../database/ListRepository";
 import { useListContext } from "../contexts/ListContext";
+import LitterButton from "@/src/components/LitterButton";
+import Toast from "react-native-toast-message";
 
 export default function NewListScreen() {
+  const { idlista } = useLocalSearchParams();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const navigation = useNavigation();
   const { fetchLists } = useListContext();
 
+  useEffect(() => {
+    if (idlista) {
+      fetchList();
+    }
+  }, []);
+
+  const fetchList = async () => {
+    const list = await ListRepository.getList({ idlista: Number(idlista) });
+    if (list) {
+      navigation.setOptions({ title: list.nomelista });
+      setTitle(list.nomelista);
+      setDescription(list.descricao);
+    }
+  };
+
   const newList = async () => {
     if (title) {
-      await ListRepository.newList({
+      await ListRepository.updateList({
+        idlista: Number(idlista),
         nomelista: title,
         descricao: description,
-        colunas: ["Coluna 1"],
+        colunas: [],
       });
-      fetchLists(); // Updates the list of lists globally
+      fetchLists();
       navigation.goBack();
     }
+  };
+
+  const deleteList = async () => {
+    console.log("deleteList");
+    if (idlista) {
+      await ListRepository.deleteList(Number(idlista));
+      fetchLists();
+      navigation.goBack();
+    }
+  };
+
+  const showToast = () => {
+    Toast.show({
+      type: "info",
+      text1: "Apagando um item",
+      text2: "Para apagar, segure o botão de apagar",
+    });
   };
 
   return (
@@ -45,6 +81,10 @@ export default function NewListScreen() {
         onChangeText={setDescription}
       />
       <View style={styles.buttonContainer}>
+        <LitterButton
+          onPress={() => showToast()}
+          onLongPress={() => deleteList()}
+        />
         <CancelButton onPress={() => navigation.goBack()} />
         <ConfirmButton onPress={newList} />
       </View>

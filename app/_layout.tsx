@@ -18,6 +18,10 @@ export default function RootLayout() {
               name="NewListScreen"
               options={{ title: "Nova lista" }}
             />
+            <Stack.Screen
+              name="EditListScreen"
+              options={{ title: "Editar lista" }}
+            />
             <Stack.Screen name="lista/[idlista]" options={{ title: "Lista" }} />
           </Stack>
           <Toast />

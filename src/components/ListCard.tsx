@@ -4,7 +4,6 @@ import PenSvg from "./PenSvg.jsx";
 import { Link } from "expo-router";
 
 export default function ListCard({ list }: { list: DatabaseListReturn }) {
-
   return (
     <Link
       href={{
@@ -19,7 +18,7 @@ export default function ListCard({ list }: { list: DatabaseListReturn }) {
           <Text style={styles.listDescription}>{list.descricao}</Text>
           <Link
             href={{
-              pathname: "/NewListScreen",
+              pathname: "/EditListScreen",
               params: { idlista: list.idlista },
             }}
             asChild
