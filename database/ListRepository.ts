@@ -88,10 +88,10 @@ async function getAllLists(): Promise<DatabaseListReturn[]> {
 
 async function getAllColumns(
   idLista: number
-): Promise<{ nomecoluna: string; oredemlista: number }[]> {
+): Promise<{ idcoluna: number, nomecoluna: string; oredemlista: number }[]> {
   const db = await SQLite.openDatabaseAsync("dylists.db");
   return db.getAllAsync(
-    "SELECT nomecoluna, ordemlista FROM coluna WHERE idlista = ?",
+    "SELECT idcoluna, nomecoluna, ordemlista FROM coluna WHERE idlista = ?",
     idLista
   );
 }
