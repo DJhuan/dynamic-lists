@@ -1,18 +1,13 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import { DatabaseItemReturn } from "@/Types";
+import { DatabaseColumnReturn, DatabaseItemReturn } from "@/Types";
 
 import Columnheader from "./Columnheader";
 import ItemColumn from "./ItemColumn";
 
-interface coluna {
-  nomecoluna: string;
-  oredemlista: number;
-}
-
 interface ColumnContainerProps {
   items: DatabaseItemReturn[];
-  columns: coluna[];
+  columns: DatabaseColumnReturn[];
   onDelete: (idItem: number) => void;
   deleting: boolean;
 }

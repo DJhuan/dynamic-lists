@@ -21,3 +21,10 @@ export interface DatabaseItemReturn {
   nomeitem: string;
   coluna: number;
 }
+
+export interface DatabaseColumnReturn {
+  idcoluna: number;
+  idlista: number;
+  nomecoluna: string;
+  ordemlista: number;
+}

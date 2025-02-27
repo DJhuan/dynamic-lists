@@ -11,15 +11,10 @@ import { useLocalSearchParams, useNavigation } from "expo-router";
 import PlusSvg from "../../src/lista/components/PlusSvg";
 import LitterSvg from "../../src/lista/components/LitterSvg";
 import ItemRepository from "@/database/ItemRepository";
-import { DatabaseItemReturn } from "@/Types";
+import { DatabaseColumnReturn, DatabaseItemReturn, DatabaseListReturn } from "@/Types";
 import ColumnContainer from "@/src/lista/components/ColumnContainer";
 import CancelSvg from "@/src/components/CancelSvg";
-import ListRepository from "@/database/ListRepository";
-
-interface coluna {
-  nomecoluna: string;
-  oredemlista: number;
-}
+import ColumnRepository from "@/database/ColumnRepository";
 
 export default function ListScreen() {
   const navigation = useNavigation();
@@ -29,10 +24,10 @@ export default function ListScreen() {
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [itemname, setItemname] = useState("");
-  const [cols, setCols] = useState<coluna[]>([]);
+  const [cols, setCols] = useState<DatabaseColumnReturn[]>([]);
 
   const getColumns = async () => {
-    setCols(await ListRepository.getAllColumns(Number(idlista)));
+    setCols(await ColumnRepository.getAllColumns(Number(idlista)));
   };
 
   const fetchItems = async () => {

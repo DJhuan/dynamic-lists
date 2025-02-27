@@ -1,11 +1,13 @@
 import * as SQLite from "expo-sqlite";
+import { DatabaseColumnReturn } from "@/Types";
+
 
 async function getAllColumns(
   idLista: number
-): Promise<{ idcoluna: number; nomecoluna: string; oredemlista: number }[]> {
+): Promise<DatabaseColumnReturn[]> {
   const db = await SQLite.openDatabaseAsync("dylists.db");
   return db.getAllAsync(
-    "SELECT idcoluna, nomecoluna, ordemlista FROM coluna WHERE idlista = ?",
+    "SELECT idcoluna, idlista, nomecoluna, ordemlista FROM coluna WHERE idlista = ?",
     idLista
   );
 }
