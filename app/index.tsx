@@ -1,6 +1,6 @@
 import { Link } from "expo-router";
 import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { useListContext } from "@/contexts/ListContext";
+import { useListContext } from "@/context/ListContext";
 import ListCard from "../src/components/ListCard";
 import PlusSvg from "@/src/lista/components/PlusSvg";
 

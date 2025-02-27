@@ -4,7 +4,7 @@ import { View, Text, TextInput, StyleSheet, ScrollView } from "react-native";
 import ConfirmButton from "../src/components/ConfirmButton";
 import CancelButton from "../src/components/CancelButton";
 import ListRepository from "../database/ListRepository";
-import { useListContext } from "../contexts/ListContext";
+import { useListContext } from "../context/ListContext";
 import LitterButton from "@/src/components/LitterButton";
 import Toast from "react-native-toast-message";
 import ColumnEditor from "@/src/components/ColumnEditor";

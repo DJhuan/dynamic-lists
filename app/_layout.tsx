@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { SQLiteProvider } from "expo-sqlite";
 import { initializeDatabase } from "@/database/initializeDatabase";
 import LoadingDatabase from "../src/components/LoadingDatabase";
-import { ListProvider } from "@/contexts/ListContext";
+import { ListProvider } from "@/context/ListContext";
 
 import Toast from "react-native-toast-message";
 

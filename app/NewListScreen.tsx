@@ -4,7 +4,7 @@ import { View, Text, TextInput, StyleSheet, ScrollView } from "react-native";
 import ConfirmButton from "../src/components/ConfirmButton";
 import CancelButton from "../src/components/CancelButton";
 import ListRepository from "../database/ListRepository";
-import { useListContext } from "../contexts/ListContext";
+import { useListContext } from "../context/ListContext";
 import ColumnEditor from "@/src/components/ColumnAdder";
 import Toast from "react-native-toast-message";
 
@@ -25,7 +25,7 @@ export default function NewListScreen() {
       await ListRepository.newList({
         nomelista: title,
         descricao: description,
-        colunas: columns.map(column => column.nomecoluna),
+        colunas: columns.map((column) => column.nomecoluna),
       });
       fetchLists(); // Updates the list of lists globally
       navigation.goBack();
@@ -58,7 +58,7 @@ export default function NewListScreen() {
           value={description}
           onChangeText={setDescription}
         />
-        <ColumnEditor onColumnsChange={setColumns}/>
+        <ColumnEditor onColumnsChange={setColumns} />
       </ScrollView>
       <View style={styles.buttonContainer}>
         <CancelButton onPress={() => navigation.goBack()} />
