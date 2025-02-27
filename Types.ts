@@ -28,3 +28,9 @@ export interface DatabaseColumnReturn {
   nomecoluna: string;
   ordemlista: number;
 }
+
+export interface ItemContextType {
+  idlista: number;
+  items: DatabaseItemReturn[];
+  fetchItems: () => void;
+}
