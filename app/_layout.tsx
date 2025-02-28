@@ -22,7 +22,7 @@ export default function RootLayout() {
               name="EditListScreen"
               options={{ title: "Editar lista" }}
             />
-            <Stack.Screen name="lista/[idlista]" options={{ title: "Lista" }} />
+            <Stack.Screen name="(lista)" options={{ title: "Lista" }} />
           </Stack>
           <Toast />
         </ListProvider>

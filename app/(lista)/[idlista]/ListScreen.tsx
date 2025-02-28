@@ -1,32 +1,45 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
-import { useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+import { useNavigation, useLocalSearchParams, router } from "expo-router";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
+import ColumnContainer from "@/src/lista/components/ColumnContainer";
+import ItemProvider from "@/context/ItemContext";
 
-import CancelSvg from "@/src/components/CancelSvg";
-import PlusSvg from "./PlusSvg";
+import PlusSvg from "@/src/lista/components/PlusSvg";
+import LitterSvg from "@/src/lista/components/LitterSvg";
 
-export default function ItemEditor() {
-  const [itemname, setItemname] = useState("");
+export default function ListScreen() {
+  const navigation = useNavigation();
+  const { nomelista, idlista } = useLocalSearchParams();
+  const [editing, setEditing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  // Updates the title of the screen, columns and items when the screen is loaded
+  useEffect(() => {
+    navigation.setOptions({ title: nomelista });
+  }, []);
+
+  const handleCancelAction = () => {
+    if (editing) {
+      setEditing(false);
+    } else {
+      setDeleting(true);
+    }
+  };
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={styles.textContainer}>
-        <Text style={styles.title}>Nome do item</Text>
-        <TextInput
-          placeholder="Nome do novo item"
-          style={styles.itemInput}
-          value={itemname}
-          onChangeText={setItemname}
-        />
-      </View>
+      <ItemProvider idlista={Number(idlista)}>
+        <ColumnContainer deleting={deleting} />
+      </ItemProvider>
+
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={handleCancelAction}>
           <View style={styles.deleteButton}>
-            <CancelSvg />
+            <LitterSvg />
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => router.navigate("./AddItem")}>
           <View style={styles.plusButton}>
             <PlusSvg />
           </View>
