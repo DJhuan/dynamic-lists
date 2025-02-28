@@ -2,7 +2,9 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import LArrowSvg from "./LArrowSvg";
 import RArrowSvg from "./RArrowSvg";
 import LitterSvg from "./LitterSvg";
-import { DatabaseItemReturn } from "@/Types";
+import { useContext } from "react";
+import { DatabaseItemReturn, ItemContextType } from "@/Types";
+import { ItemContext } from "@/context/ItemContext";
 
 interface ItemCardProps {
   item: DatabaseItemReturn;
@@ -10,11 +12,17 @@ interface ItemCardProps {
 }
 
 export default function ItemCard({ item, deleting }: ItemCardProps) {
+  const { deleteItem } = useContext(ItemContext) as ItemContextType;
+
+  const handleDelete = () => {
+    deleteItem(item.iditem);
+  };
+
   if (deleting) {
     return (
       <View style={styles.container}>
         <Text style={styles.itemName}>{item.nomeitem}</Text>
-        <TouchableOpacity style={styles.topc} onPress={() => {}}>
+        <TouchableOpacity style={styles.topc} onPress={() => handleDelete()}>
           <LitterSvg color="#FF4747" />
         </TouchableOpacity>
       </View>

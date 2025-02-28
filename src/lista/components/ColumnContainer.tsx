@@ -10,9 +10,13 @@ import ItemColumn from "./ItemColumn";
 
 interface ColumnContainerProps {
   deleting: boolean;
+  onColumnChange: (idcoluna: number) => void;
 }
 
-export default function ColumnContainer({ deleting }: ColumnContainerProps) {
+export default function ColumnContainer({
+  deleting,
+  onColumnChange,
+}: ColumnContainerProps) {
   const [colNumber, setColnumber] = useState(0);
   const [columns, setColumns] = useState<DatabaseColumnReturn[]>([]);
   const { idlista } = useContext(ItemContext) as ItemContextType;
@@ -21,9 +25,16 @@ export default function ColumnContainer({ deleting }: ColumnContainerProps) {
     fetchColumns();
   }, []);
 
+  useEffect(() => {
+    if (columns.length > 0) {
+      onColumnChange(columns[colNumber].idcoluna);
+    }
+  }, [colNumber, columns]);
+
   const fetchColumns = async () => {
     ColumnRepository.getAllColumns(idlista).then((columns) => {
       setColumns(columns);
+      onColumnChange(columns[colNumber].idcoluna);
     });
   };
 

@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import ItemCard from "./ItemCard";
-import { DatabaseItemReturn } from "@/Types";
 import { ItemContext } from "@/context/ItemContext";
 import { ItemContextType } from "@/Types";
 
@@ -10,19 +9,20 @@ interface ItemColumnProps {
   deleting: boolean;
 }
 
-export default function ItemColumn({currentColumnId, deleting}: ItemColumnProps) {
-  const {items} = useContext(ItemContext) as ItemContextType;
+export default function ItemColumn({
+  currentColumnId,
+  deleting,
+}: ItemColumnProps) {
+  const { items } = useContext(ItemContext) as ItemContextType;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>
-        {items.filter((i) => i.coluna === currentColumnId).map((item, index) => (
-          <ItemCard
-            key={index}
-            item={item}
-            deleting={deleting}
-          />
-        ))}
+        {items
+          .filter((i) => i.coluna === currentColumnId)
+          .map((item, index) => (
+            <ItemCard key={index} item={item} deleting={deleting} />
+          ))}
       </View>
     </ScrollView>
   );

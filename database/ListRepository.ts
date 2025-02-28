@@ -17,7 +17,6 @@ async function newList({ nomelista: nomeLista, descricao, colunas }: List) {
     );
 
     const idLista = <number>(await resultIterator.next()).value.idlista;
-    console.log(idLista);
     colunas.map(async (coluna, ordemLista) => {
       await columnStatement.executeAsync(coluna, idLista, ordemLista);
     });

@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import { useNavigation, useLocalSearchParams, router } from "expo-router";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import ColumnContainer from "@/src/lista/components/ColumnContainer";
-import ItemProvider from "@/context/ItemContext";
 
 import PlusSvg from "@/src/lista/components/PlusSvg";
 import LitterSvg from "@/src/lista/components/LitterSvg";
+import CancelSvg from "@/src/components/CancelSvg";
+import CheckSvg from "@/src/components/CheckSvg";
 
 export default function ListScreen() {
   const navigation = useNavigation();
-  const { nomelista, idlista } = useLocalSearchParams();
-  const [editing, setEditing] = useState(false);
+  const { nomelista } = useLocalSearchParams();
+  const [columnid, setColumnid] = useState(0);
   const [deleting, setDeleting] = useState(false);
 
   // Updates the title of the screen, columns and items when the screen is loaded
@@ -19,29 +20,40 @@ export default function ListScreen() {
   }, []);
 
   const handleCancelAction = () => {
-    if (editing) {
-      setEditing(false);
+    setDeleting(!deleting);
+  };
+
+  const handlePlusAction = () => {
+    if (deleting) {
+      setDeleting(false);
     } else {
-      setDeleting(true);
+      router.push({
+        pathname: "./AddItem",
+        params: { idcoluna: columnid },
+      });
     }
+  };
+
+  const handleColumnChange = (idcoluna: number) => {
+    setColumnid(idcoluna);
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <ItemProvider idlista={Number(idlista)}>
-        <ColumnContainer deleting={deleting} />
-      </ItemProvider>
-
+      <ColumnContainer
+        deleting={deleting}
+        onColumnChange={handleColumnChange}
+      />
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handleCancelAction}>
           <View style={styles.deleteButton}>
-            <LitterSvg />
+            {deleting ? <CancelSvg /> : <LitterSvg />}
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.navigate("./AddItem")}>
+        <TouchableOpacity onPress={() => handlePlusAction()}>
           <View style={styles.plusButton}>
-            <PlusSvg />
+            {deleting ? <CheckSvg /> : <PlusSvg />}
           </View>
         </TouchableOpacity>
       </View>
@@ -57,6 +69,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     right: 10,
     bottom: 15,
+    gap: 10,
   },
   plusButton: {
     backgroundColor: "#FFCB47",

@@ -33,4 +33,6 @@ export interface ItemContextType {
   idlista: number;
   items: DatabaseItemReturn[];
   fetchItems: () => void;
+  addItem: (nomeitem: string, idcoluna: number) => void;
+  deleteItem: (iditem: number) => void;
 }

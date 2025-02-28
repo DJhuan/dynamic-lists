@@ -7,7 +7,7 @@ export default function ListCard({ list }: { list: DatabaseListReturn }) {
   return (
     <Link
       href={{
-        pathname: "/(lista)/[idlista]/ListScreen",
+        pathname: "/(lista)/ListScreen",
         params: { idlista: list.idlista, nomelista: list.nomelista },
       }}
       asChild

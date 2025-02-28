@@ -1,13 +1,33 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { TouchableOpacity } from "react-native";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+
+import { ItemContext } from "@/context/ItemContext";
+import { ItemContextType } from "@/Types";
 
 import CancelSvg from "@/src/components/CancelSvg";
-import PlusSvg from "../../../src/lista/components/PlusSvg";
+import PlusSvg from "../../src/lista/components/PlusSvg";
+import Toast from "react-native-toast-message";
+import ConfirmButton from "@/src/components/ConfirmButton";
 
 export default function AddItem() {
   const [itemname, setItemname] = useState("");
+  const { addItem } = useContext(ItemContext) as ItemContextType;
+  const { idcoluna } = useLocalSearchParams();
+
+  const handleAddItem = () => {
+    if (!itemname) {
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "O nome do item não pode ser vazio",
+      });
+    } else {
+      addItem(itemname, Number(idcoluna));
+      router.navigate("./ListScreen");
+    }
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -21,17 +41,20 @@ export default function AddItem() {
         />
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => router.navigate("./ListScreen")}>
+        <TouchableOpacity
+          onPress={() =>
+            router.navigate({
+              pathname: "./ListScreen",
+              params: { idcoluna: idcoluna },
+            })
+          }
+        >
           <View style={styles.deleteButton}>
             <CancelSvg />
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {}}>
-          <View style={styles.plusButton}>
-            <PlusSvg />
-          </View>
-        </TouchableOpacity>
+          <ConfirmButton onPress={handleAddItem} />
       </View>
     </View>
   );
@@ -45,6 +68,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     right: 10,
     bottom: 15,
+    gap: 10,
   },
   plusButton: {
     backgroundColor: "#FFCB47",
