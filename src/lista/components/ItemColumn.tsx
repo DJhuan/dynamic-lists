@@ -2,15 +2,15 @@ import { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import ItemCard from "./ItemCard";
 import { ItemContext } from "@/context/ItemContext";
-import { ItemContextType } from "@/Types";
+import { ItemContextType, SurroundingColumns } from "@/Types";
 
 interface ItemColumnProps {
-  currentColumnId: number;
+  surroundingColumns: SurroundingColumns;
   deleting: boolean;
 }
 
 export default function ItemColumn({
-  currentColumnId,
+  surroundingColumns,
   deleting,
 }: ItemColumnProps) {
   const { items } = useContext(ItemContext) as ItemContextType;
@@ -19,9 +19,9 @@ export default function ItemColumn({
     <ScrollView contentContainerStyle={styles.container}>
       <View>
         {items
-          .filter((i) => i.coluna === currentColumnId)
+          .filter((i) => i.coluna === surroundingColumns.current)
           .map((item, index) => (
-            <ItemCard key={index} item={item} deleting={deleting} />
+            <ItemCard key={index} item={item} deleting={deleting} surroundingColumns={surroundingColumns}/>
           ))}
       </View>
     </ScrollView>

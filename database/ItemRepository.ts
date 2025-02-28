@@ -28,4 +28,15 @@ async function deleteItem(idItem: number): Promise<void> {
   }
 }
 
-export default { getAllItems, newItem, deleteItem};
+async function moveItem(iditem: number, idcoluna: number): Promise<void> {
+  const db = await SQLite.openDatabaseAsync("dylists.db");
+
+  const updateStatement = await db.prepareAsync("UPDATE item SET coluna = ? WHERE iditem = ?");
+  try {
+    await updateStatement.executeAsync(idcoluna, iditem);
+  } finally {
+    await updateStatement.finalizeAsync();
+  }
+}
+
+export default { getAllItems, newItem, deleteItem, moveItem};

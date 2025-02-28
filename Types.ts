@@ -35,4 +35,11 @@ export interface ItemContextType {
   fetchItems: () => void;
   addItem: (nomeitem: string, idcoluna: number) => void;
   deleteItem: (iditem: number) => void;
+  moveItem: (iditem: number, idcoluna: number) => void;
+}
+
+export interface SurroundingColumns {
+  prev: number | null;
+  current: number;
+  next: number | null;
 }

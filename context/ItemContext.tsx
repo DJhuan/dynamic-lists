@@ -23,13 +23,17 @@ const ItemProvider: React.FC<{
     await ItemRepository.deleteItem(iditem);
   };
 
+  const moveItem = async (iditem: number, idcoluna: number) => {
+    await ItemRepository.moveItem(iditem, idcoluna);
+  };
+
   useEffect(() => {
     fetchItems();
-  }, [addItem, deleteItem]);
+  }, [addItem, deleteItem, moveItem]);
 
   return (
     <ItemContext.Provider
-      value={{ idlista, items, fetchItems, addItem, deleteItem }}
+      value={{ idlista, items, fetchItems, addItem, deleteItem, moveItem }}
     >
       {children}
     </ItemContext.Provider>

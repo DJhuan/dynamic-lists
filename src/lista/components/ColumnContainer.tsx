@@ -1,11 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import { DatabaseColumnReturn } from "@/Types";
+import {
+  DatabaseColumnReturn,
+  SurroundingColumns,
+  ItemContextType,
+} from "@/Types";
 
 import Columnheader from "./Columnheader";
 import ColumnRepository from "@/database/ColumnRepository";
 import { ItemContext } from "@/context/ItemContext";
-import { ItemContextType } from "@/Types";
 import ItemColumn from "./ItemColumn";
 
 interface ColumnContainerProps {
@@ -49,6 +52,19 @@ export default function ColumnContainer({
     }
   };
 
+  const getSurroundingColumns = () => {
+    const current = columns[colNumber].idcoluna;
+    let next = null;
+    if (colNumber < columns.length - 1) {
+      next = columns[colNumber + 1].idcoluna;
+    }
+    let prev = null;
+    if (colNumber > 0) {
+      prev = columns[colNumber - 1].idcoluna;
+    }
+    return { prev, current, next };
+  };
+
   // When the items are still loading
   if (columns.length === 0) {
     return (
@@ -65,7 +81,7 @@ export default function ColumnContainer({
         callback={updateColNumber}
       />
       <ItemColumn
-        currentColumnId={columns[colNumber].idcoluna}
+        surroundingColumns={getSurroundingColumns() as SurroundingColumns}
         deleting={deleting}
       />
     </View>

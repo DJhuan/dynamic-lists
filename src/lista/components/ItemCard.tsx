@@ -3,19 +3,40 @@ import LArrowSvg from "./LArrowSvg";
 import RArrowSvg from "./RArrowSvg";
 import LitterSvg from "./LitterSvg";
 import { useContext } from "react";
-import { DatabaseItemReturn, ItemContextType } from "@/Types";
+import {
+  DatabaseItemReturn,
+  ItemContextType,
+  SurroundingColumns,
+} from "@/Types";
 import { ItemContext } from "@/context/ItemContext";
 
 interface ItemCardProps {
   item: DatabaseItemReturn;
   deleting: boolean;
+  surroundingColumns: SurroundingColumns;
 }
 
-export default function ItemCard({ item, deleting }: ItemCardProps) {
-  const { deleteItem } = useContext(ItemContext) as ItemContextType;
+export default function ItemCard({
+  item,
+  deleting,
+  surroundingColumns,
+}: ItemCardProps) {
+  const { deleteItem, moveItem } = useContext(ItemContext) as ItemContextType;
 
   const handleDelete = () => {
     deleteItem(item.iditem);
+  };
+
+  const handleMovePre = () => {
+    if (surroundingColumns.prev) {
+      moveItem(item.iditem, surroundingColumns.prev);
+    }
+  };
+
+  const handleMoveNext = () => {
+    if (surroundingColumns.next) {
+      moveItem(item.iditem, surroundingColumns.next);
+    }
   };
 
   if (deleting) {
@@ -30,11 +51,11 @@ export default function ItemCard({ item, deleting }: ItemCardProps) {
   } else {
     return (
       <View style={styles.container}>
-        <TouchableOpacity style={styles.topc}>
+        <TouchableOpacity style={styles.topc} onPress={() => handleMovePre()}>
           <LArrowSvg />
         </TouchableOpacity>
         <Text style={styles.itemName}>{item.nomeitem}</Text>
-        <TouchableOpacity style={styles.topc}>
+        <TouchableOpacity style={styles.topc} onPress={() => handleMoveNext()}>
           <RArrowSvg />
         </TouchableOpacity>
       </View>
