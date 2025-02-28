@@ -12,7 +12,7 @@ import Toast from "react-native-toast-message";
 interface Column {
   idcoluna: number;
   nomecoluna: string;
-  oredemlista: number;
+  ordemlista: number;
 }
 
 interface ColumnEditorProps {
@@ -23,6 +23,7 @@ const ColumnEditor: React.FC<ColumnEditorProps> = ({ idlista }) => {
   const [columns, setColumns] = useState<Column[]>([]);
   const [editingColumn, setEditingColumn] = useState<number | null>(null);
   const [newColumnName, setNewColumnName] = useState<string>("");
+  const [newColumnInput, setNewColumnInput] = useState<string>("");
 
   useEffect(() => {
     fetchColumns();
@@ -63,6 +64,14 @@ const ColumnEditor: React.FC<ColumnEditorProps> = ({ idlista }) => {
     }
   };
 
+  const handleAddColumn = async () => {
+    if (newColumnInput.trim() !== "") {
+      await ColumnRepository.newColumn(idlista, newColumnInput);
+      setNewColumnInput("");
+      fetchColumns();
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Editar Colunas</Text>
@@ -98,6 +107,17 @@ const ColumnEditor: React.FC<ColumnEditorProps> = ({ idlista }) => {
           )}
         </View>
       ))}
+      <View style={styles.addColumnContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Nova coluna"
+          value={newColumnInput}
+          onChangeText={setNewColumnInput}
+        />
+        <TouchableOpacity onPress={handleAddColumn}>
+          <Text style={styles.addButton}>Adicionar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -141,6 +161,15 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     color: "#FF4747",
+    marginLeft: 10,
+  },
+  addColumnContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  addButton: {
+    color: "#4CAF50",
     marginLeft: 10,
   },
 });

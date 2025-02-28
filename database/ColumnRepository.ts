@@ -1,10 +1,7 @@
 import * as SQLite from "expo-sqlite";
-import { DatabaseColumnReturn } from "@/Types";
+import { DatabaseColumnReturn, DatabaseListReturn } from "@/Types";
 
-
-async function getAllColumns(
-  idLista: number
-): Promise<DatabaseColumnReturn[]> {
+async function getAllColumns(idLista: number): Promise<DatabaseColumnReturn[]> {
   const db = await SQLite.openDatabaseAsync("dylists.db");
   return db.getAllAsync(
     "SELECT idcoluna, idlista, nomecoluna, ordemlista FROM coluna WHERE idlista = ?",
@@ -36,4 +33,25 @@ async function deleteColumn(idcoluna: number) {
   }
 }
 
-export default { getAllColumns, updateColumn, deleteColumn };
+async function newColumn(idlista: number, nomecoluna: string) {
+  try {
+    const db = await SQLite.openDatabaseAsync("dylists.db");
+    const lista = await db.getFirstAsync<DatabaseColumnReturn>(
+      "SELECT * FROM coluna WHERE idlista = ? ORDER BY ordemlista DESC"
+    );
+    const nextOrdem = lista ? lista.ordemlista + 1 : 0;
+    const columnStatement = await db.prepareAsync(
+      "INSERT INTO coluna (nomecoluna, idlista, ordemlista) VALUES (?, ?, ?)"
+    );
+    try {
+      await columnStatement.executeAsync(nomecoluna, idlista, nextOrdem);
+    } finally {
+      await columnStatement.finalizeAsync();
+    }
+  } catch (error) {
+    console.log("newColumn", error);
+  }
+  
+}
+
+export default { getAllColumns, updateColumn, deleteColumn, newColumn };
