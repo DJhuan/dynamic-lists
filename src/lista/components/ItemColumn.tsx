@@ -1,35 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import ItemCard from "./ItemCard";
 import { DatabaseItemReturn } from "@/Types";
+import { ItemContext } from "@/context/ItemContext";
+import { ItemContextType } from "@/Types";
 
 interface ItemColumnProps {
-  columnItems: DatabaseItemReturn[];
-  onDeleteItem: (idItem: number) => void;
+  currentColumnId: number;
   deleting: boolean;
 }
 
-export default function ItemColumn({
-  columnItems,
-  onDeleteItem,
-  deleting,
-}: ItemColumnProps) {
-  const [items, setItems] = useState<DatabaseItemReturn[]>(columnItems);
-
-  useEffect(() => {
-    setItems(columnItems);
-  }, [columnItems]);
-
-  useEffect(() => {}, [deleting]);
+export default function ItemColumn({currentColumnId, deleting}: ItemColumnProps) {
+  const {items} = useContext(ItemContext) as ItemContextType;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>
-        {items.map((item, index) => (
+        {items.filter((i) => i.coluna === currentColumnId).map((item, index) => (
           <ItemCard
             key={index}
             item={item}
-            onDelete={onDeleteItem}
             deleting={deleting}
           />
         ))}

@@ -1,55 +1,27 @@
 import { useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
-import { useLocalSearchParams, useNavigation } from "expo-router";
-
-import PlusSvg from "../../src/lista/components/PlusSvg";
-import LitterSvg from "../../src/lista/components/LitterSvg";
-import ItemRepository from "@/database/ItemRepository";
-import { DatabaseColumnReturn, DatabaseItemReturn, DatabaseListReturn } from "@/Types";
+import { useNavigation, useLocalSearchParams } from "expo-router";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import ColumnContainer from "@/src/lista/components/ColumnContainer";
+import ItemProvider from "@/context/ItemContext";
+
+import PlusSvg from "@/src/lista/components/PlusSvg";
+import LitterSvg from "@/src/lista/components/LitterSvg";
 import CancelSvg from "@/src/components/CancelSvg";
-import ColumnRepository from "@/database/ColumnRepository";
 
 export default function ListScreen() {
   const navigation = useNavigation();
-
-  const { idlista, nomelista } = useLocalSearchParams();
-  const [items, setItems] = useState<DatabaseItemReturn[]>([]);
+  const { nomelista, idlista } = useLocalSearchParams();
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [itemname, setItemname] = useState("");
-  const [cols, setCols] = useState<DatabaseColumnReturn[]>([]);
 
-  const getColumns = async () => {
-    setCols(await ColumnRepository.getAllColumns(Number(idlista)));
-  };
-
-  const fetchItems = async () => {
-    setItems(await ItemRepository.getAllItems(Number(idlista)));
-  };
-
-  const newItem = async () => {
-    if (itemname) {
-      await ItemRepository.newItem(itemname, Number(idlista));
-      setItemname("");
-      fetchItems();
-    }
-  };
-
-  const deleteItem = async (idItem: number) => {
-    await ItemRepository.deleteItem(idItem);
-    fetchItems();
-  };
+  // Updates the title of the screen, columns and items when the screen is loaded
+  useEffect(() => {
+    navigation.setOptions({ title: nomelista });
+  }, []);
 
   const handlePlusAction = () => {
     if (editing) {
-      newItem();
+      //newItem();
       setEditing(false);
     } else {
       if (deleting) {
@@ -68,33 +40,11 @@ export default function ListScreen() {
     }
   };
 
-  // Updates the title of the screen, columns and items when the screen is loaded
-  useEffect(() => {
-    navigation.setOptions({ title: nomelista });
-    getColumns();
-    fetchItems();
-  }, []);
-
   return (
-    <>
-      {!editing ? (
-        <ColumnContainer
-          items={items}
-          columns={cols}
-          onDelete={deleteItem}
-          deleting={deleting}
-        />
-      ) : (
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>Nome do item</Text>
-          <TextInput
-            placeholder="Nome do novo item"
-            style={styles.itemInput}
-            value={itemname}
-            onChangeText={setItemname}
-          />
-        </View>
-      )}
+    <View style={{ flex: 1 }}>
+      <ItemProvider idlista={Number(idlista)}>
+        <ColumnContainer deleting={deleting} />
+      </ItemProvider>
 
       <View style={styles.buttonContainer}>
         {!deleting ? (
@@ -111,7 +61,7 @@ export default function ListScreen() {
           </View>
         </TouchableOpacity>
       </View>
-    </>
+    </View>
   );
 }
 

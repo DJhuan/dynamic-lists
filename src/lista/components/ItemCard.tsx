@@ -6,19 +6,15 @@ import { DatabaseItemReturn } from "@/Types";
 
 interface ItemCardProps {
   item: DatabaseItemReturn;
-  onDelete: (idItem: number) => void;
   deleting: boolean;
 }
 
-export default function ItemCard({ item, onDelete, deleting }: ItemCardProps) {
+export default function ItemCard({ item, deleting }: ItemCardProps) {
   if (deleting) {
     return (
       <View style={styles.container}>
         <Text style={styles.itemName}>{item.nomeitem}</Text>
-        <TouchableOpacity
-          style={styles.topc}
-          onPress={() => onDelete(item.iditem)}
-        >
+        <TouchableOpacity style={styles.topc} onPress={() => {}}>
           <LitterSvg color="#FF4747" />
         </TouchableOpacity>
       </View>

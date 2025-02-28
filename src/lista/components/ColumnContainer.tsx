@@ -1,24 +1,31 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import { DatabaseColumnReturn, DatabaseItemReturn } from "@/Types";
+import { DatabaseColumnReturn } from "@/Types";
 
 import Columnheader from "./Columnheader";
+import ColumnRepository from "@/database/ColumnRepository";
+import { ItemContext } from "@/context/ItemContext";
+import { ItemContextType } from "@/Types";
 import ItemColumn from "./ItemColumn";
 
 interface ColumnContainerProps {
-  items: DatabaseItemReturn[];
-  columns: DatabaseColumnReturn[];
-  onDelete: (idItem: number) => void;
   deleting: boolean;
 }
 
-export default function ColumnContainer({
-  items,
-  columns,
-  onDelete,
-  deleting,
-}: ColumnContainerProps) {
+export default function ColumnContainer({ deleting }: ColumnContainerProps) {
   const [colNumber, setColnumber] = useState(0);
+  const [columns, setColumns] = useState<DatabaseColumnReturn[]>([]);
+  const { idlista } = useContext(ItemContext) as ItemContextType;
+
+  useEffect(() => {
+    fetchColumns();
+  }, []);
+
+  const fetchColumns = async () => {
+    ColumnRepository.getAllColumns(idlista).then((columns) => {
+      setColumns(columns);
+    });
+  };
 
   const updateColNumber = (shift: number) => {
     const newCol = colNumber + shift;
@@ -30,10 +37,6 @@ export default function ColumnContainer({
       setColnumber(newCol);
     }
   };
-
-  function filteredItems(idcol: number) {
-    return items.filter((item) => item.coluna === idcol);
-  }
 
   // When the items are still loading
   if (columns.length === 0) {
@@ -51,8 +54,7 @@ export default function ColumnContainer({
         callback={updateColNumber}
       />
       <ItemColumn
-        columnItems={filteredItems(colNumber)}
-        onDeleteItem={onDelete}
+        currentColumnId={columns[colNumber].idcoluna}
         deleting={deleting}
       />
     </View>
@@ -63,20 +65,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#131112",
-  },
-  header: {
-    backgroundColor: "#FFCB47",
-    alignItems: "center",
-    justifyContent: "center",
-    height: 40,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#000",
-  },
-  scrollContainer: {
-    padding: 10,
   },
   noColumnsText: {
     color: "#FFF",

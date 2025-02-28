@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import { View, ScrollView, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { useListContext } from "@/context/ListContext";
 import ListCard from "../src/components/ListCard";
 import PlusSvg from "@/src/lista/components/PlusSvg";
@@ -9,9 +9,6 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <Link href="/Teste" asChild>
-        <Text style={{color: "yellow"}}>Teste</Text>
-      </Link>
       <ScrollView contentContainerStyle={styles.listContainer}>
         {lists.map((list, index) => (
           <ListCard key={index} list={list} />
